@@ -1,0 +1,11 @@
+.terraform*
+terraform.tfstate*
+ansible.cfg
+inventory/hosts
+inventory/group_vars/all.yml
+.variables.tf
+variables.bak
+crash.log
+restart-git.sh
+create.sh
+destroy.sh
