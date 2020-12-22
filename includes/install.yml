@@ -133,4 +133,3 @@
     with_items:
       - '{{ mariadb_client }}'
       - '{{ maxscale }}'
-      - '{{ nano }}'
