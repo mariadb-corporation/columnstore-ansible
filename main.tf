@@ -130,8 +130,6 @@ resource "aws_s3_bucket" "s3_bucket" {
 }
 
 resource "aws_efs_file_system" "storagemanager" {
-  throughput_mode                 = "provisioned"
-  provisioned_throughput_in_mibps = 200
   tags = {
     Name = "storagemanager"
   }
