@@ -68,14 +68,15 @@
       block: |
         character_set_server = utf8
         collation_server = utf8_general_ci
+        columnstore_use_import_for_batchinsert=ON
+        gtid_strict_mode = ON
+        ignore_db_dir = .pki
         log_bin = /var/log/mariadb/mariadb-bin
         log_bin_index = /var/log/mariadb/mariadb-bin.index
         log_error = /var/log/mariadb/mariadb-error.log
+        log_slave_updates = ON
         relay_log = /var/log/mariadb/mariadb-relay
         relay_log_index = /var/log/mariadb/mariadb-relay.index
-        log_slave_updates = ON
-        gtid_strict_mode = ON
-        columnstore_use_import_for_batchinsert=ON
 
   - name: "Verify Ownership Of Log Folder"
     file:
