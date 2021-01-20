@@ -20,7 +20,7 @@ This is a [Terraform](https://www.terraform.io/) and [Ansible](https://www.ansib
 *   [MariaDB Enterprise Token](https://customers.mariadb.com/downloads/token/)
 
 *<sup>†</sup> Requires Terraform v0.14.4 or above.*  
-*<sup>‡</sup>Requires Ansible 2.10.5 or above.*
+*<sup>‡</sup> Requires Ansible 2.10.5 or above.*
 
 #### Instructions:
 
