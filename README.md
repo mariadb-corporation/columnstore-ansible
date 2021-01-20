@@ -19,7 +19,7 @@ This is a [Terraform](https://www.terraform.io/) and [Ansible](https://www.ansib
 *   [Download Ansible](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html) *<sup>†</sup>*
 *   [MariaDB Enterprise Token](https://customers.mariadb.com/downloads/token/)
 
-*<sup>†</sup> Please upgrade to the latest version before beginning this tutorial.*
+*<sup>†</sup> Requires Ansible version 2.10 or above.*
 
 #### Instructions:
 
