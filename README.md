@@ -15,8 +15,8 @@ This is a [Terraform](https://www.terraform.io/) and [Ansible](https://www.ansib
 #### Prerequisites:
 
 *   [Amazon Web Services (AWS) Account](https://aws.amazon.com/)
-*   [Download Terraform](https://www.terraform.io) *<sup>†</sup>*
-*   [Download Ansible](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html) *<sup>†</sup>*
+*   [Install Terraform](https://www.terraform.io) *<sup>†</sup>*
+*   [Install Ansible](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html#installing-ansible-with-pip) *<sup>†</sup>*
 *   [MariaDB Enterprise Token](https://customers.mariadb.com/downloads/token/)
 
 *<sup>†</sup> Requires Ansible version 2.10 or above.*
