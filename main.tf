@@ -129,16 +129,30 @@ resource "aws_s3_bucket" "s3_bucket" {
   }
 }
 
-resource "aws_efs_file_system" "storagemanager" {
-  tags = {
-    Name = "storagemanager"
-  }
+resource "aws_ebs_volume" "metadata" {
+  availability_zone    = var.aws_zone
+  iops                 = 500
+  multi_attach_enabled = true
+  size                 = 10
+  type                 = "io1"
 }
 
-resource "aws_efs_mount_target" "storagemanager_mount" {
-  file_system_id  = aws_efs_file_system.storagemanager.id
-  subnet_id       = aws_instance.mcs1.subnet_id
-  security_groups = [aws_security_group.mcs_traffic.id]
+resource "aws_volume_attachment" "metadata_mount1" {
+  device_name = "/dev/sdh"
+  volume_id   = aws_ebs_volume.metadata.id
+  instance_id = aws_instance.mcs1.id
+}
+
+resource "aws_volume_attachment" "metadata_mount2" {
+  device_name = "/dev/sdh"
+  volume_id   = aws_ebs_volume.metadata.id
+  instance_id = aws_instance.mcs2.id
+}
+
+resource "aws_volume_attachment" "metadata_mount3" {
+  device_name = "/dev/sdh"
+  volume_id   = aws_ebs_volume.metadata.id
+  instance_id = aws_instance.mcs3.id
 }
 
 resource "aws_elasticache_cluster" "mcscache" {

@@ -36,6 +36,7 @@ resource "local_file" "AnsibleVariables" {
       maxscale_pass            = var.maxscale_pass,
       maxscale_user            = var.maxscale_user,
       maxscale_version         = var.maxscale_version,
+      pcs_pass                 = var.pcs_pass,
       privateip1               = aws_instance.mcs1.private_ip,
       privateip2               = aws_instance.mcs2.private_ip,
       privateip3               = aws_instance.mcs3.private_ip,
@@ -46,7 +47,6 @@ resource "local_file" "AnsibleVariables" {
       repli_user               = var.repli_user,
       s3_bucket                = aws_s3_bucket.s3_bucket.id,
       s3_domain                = var.s3_domain
-      shared_storage_type      = var.shared_storage_type,
       use_s3                   = var.use_s3,
     }
   )

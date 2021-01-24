@@ -84,6 +84,11 @@ variable "cej_pass" {
   default = "SET YOUR COLUMNSTORE UTILITY USER PASSWORD HERE"
 }
 
+variable "pcs_pass" {
+  type    = string
+  default = "SET YOUR METADATA PCS CLUSTER PASSWORD HERE"
+}
+
 #### DO NOT EDIT BELOW THIS POINT UNLESS YOU ARE FAMILIAR WITH THESE PARAMETERS
 
 variable "mariadb_version" {
@@ -111,16 +116,15 @@ variable "aws_zone" {
   default = "us-west-2a"
 }
 
-## SAMPLE AMIs
-# "ami-0a4497cbe959da512" #centos7
-# "ami-0c9ff37f7a65a36a2" #centos8
-# "ami-0ac73f33a1888c64a" #ubuntu18
-# "ami-07dd19a7900a1f049" #ubuntu20
-
 variable "aws_ami" {
   type    = string
-  default = "ami-0c9ff37f7a65a36a2"
+  default = "ami-0a4497cbe959da512"
 }
+
+# "ami-0a4497cbe959da512" (centos7)
+# "ami-0c9ff37f7a65a36a2" (centos8)
+# "ami-0ac73f33a1888c64a" (ubuntu18)
+# "ami-07dd19a7900a1f049" (ubuntu20)
 
 variable "aws_mariadb_instance_size" {
   type    = string
@@ -140,11 +144,6 @@ variable "use_s3" {
 variable "s3_domain" {
   type    = string
   default = "amazonaws.com"
-}
-
-variable "shared_storage_type" {
-  type    = string
-  default = "efs"
 }
 
 variable "elasticache_engine" {

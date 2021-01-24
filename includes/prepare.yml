@@ -61,7 +61,6 @@
       - '{{ jq }}'
       - '{{ mlocate }}'
       - '{{ nano }}'
-      - '{{ nfs_utils }}'
       - '{{ python_dev }}'
       - '{{ python_mysql }}'
       - '{{ python_requests }}'

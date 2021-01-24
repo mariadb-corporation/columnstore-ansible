@@ -1,9 +1,11 @@
+.DS_Store
 .terraform*
 .variables.tf
 ansible.cfg
 crash.log
 create.sh
 destroy.sh
+ebs_centos8.yml
 includes/nfs.yml
 inventory/group_vars/all.yml
 inventory/hosts

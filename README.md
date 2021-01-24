@@ -7,10 +7,10 @@
 This is a [Terraform](https://www.terraform.io/) and [Ansible](https://www.ansible.com/) project to provision a **high availability** [MariaDB ColumnStore](https://mariadb.com/docs/features/mariadb-enterprise-columnstore/#mariadb-enterprise-columnstore) deployment on [Amazon Web Services](https://aws.amazon.com/). This automation project will create the following system:
 
 *   3 **MariaDB** Nodes For Durability & Performance
-*   1 **EFS** Shared Volume (Metadata)
+*   1 **GFS2** [Multi-Attach](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-volumes-multi.html) **io1** EBS Volume (Metadata)
 *   1 **S3** Bucket For Object Storage (Data)
 *   2 **MaxScale** Nodes For High Availability
-*   1 **Elasticache** Node For Query Performance
+*   1 **Elasticache** Instance For Query Performance (Redis)
 
 #### Prerequisites:
 
@@ -36,13 +36,10 @@ Open a terminal window and clone the repository:
 
 Further information can be found on our [official deployment guide](https://mariadb.com/docs/deploy/enterprise-multi-columnstore/).
 
-##### Tested On These AWS Images
+##### Approved AWS Image(s)
 AMI OS|AMI ID|Region|Zone|
 ---|---|---|---|
 centos7|ami-0a4497cbe959da512|us-west-2|us-west-2a|
-centos8|ami-0c9ff37f7a65a36a2|us-west-2|us-west-2a|
-ubuntu18|ami-0ac73f33a1888c64a|us-west-2|us-west-2a|
-ubuntu20|ami-07dd19a7900a1f049|us-west-2|us-west-2a|
 
 #### REST-API Instructions
 

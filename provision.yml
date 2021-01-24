@@ -29,9 +29,13 @@
 - name: "Preparing The Servers"
   import_playbook: includes/prepare.yml
 
-- name: "Setting Up EFS"
-  import_playbook: includes/efs.yml
-  when: shared_volumes == 'efs'
+- name: "Setting Up EBS"
+  import_playbook: includes/ebs.yml
+  when: shared_folder_type == 'ebs'
+
+#- name: "Setting Up EFS"
+#  import_playbook: includes/efs.yml
+#  when: shared_folder_type == 'efs'
 
 - name: "Installing MariaDB"
   import_playbook: includes/install.yml
