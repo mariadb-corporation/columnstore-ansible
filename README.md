@@ -36,7 +36,7 @@ Open a terminal window and clone the repository:
 
 Further information can be found on our [official deployment guide](https://mariadb.com/docs/deploy/enterprise-multi-columnstore/).
 
-##### Approved AWS Image(s)
+##### Current Approved AWS Image(s)
 AMI OS|AMI ID|Region|Zone|
 ---|---|---|---|
 centos7|ami-0a4497cbe959da512|us-west-2|us-west-2a|
