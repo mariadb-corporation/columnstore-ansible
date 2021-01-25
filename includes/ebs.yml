@@ -1,5 +1,7 @@
 ---
 
+## https://aws.amazon.com/blogs/storage/clustered-storage-simplified-gfs2-on-amazon-ebs-multi-attach-enabled-volumes/
+
 - hosts: "mcs"
   become: yes
   become_user: root
