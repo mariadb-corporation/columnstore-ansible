@@ -48,7 +48,6 @@
       dest: /etc/columnstore/storagemanager.cnf
       owner: mysql
       group: mysql
-    when: use_s3 == true
 
   - name: "Adjusting Bind Address"
     replace:
@@ -70,11 +69,12 @@
         collation_server = utf8_general_ci
         columnstore_use_import_for_batchinsert=ON
         gtid_strict_mode = ON
-        ignore_db_dir = .pki
+        ignore_db_dirs = .pki
         log_bin = /var/log/mariadb/mariadb-bin
         log_bin_index = /var/log/mariadb/mariadb-bin.index
         log_error = /var/log/mariadb/mariadb-error.log
         log_slave_updates = ON
+        lower_case_table_names = 1
         relay_log = /var/log/mariadb/mariadb-relay
         relay_log_index = /var/log/mariadb/mariadb-relay.index
 
@@ -117,6 +117,23 @@
       name: mariadb-columnstore-cmapi
       state: started
       enabled: yes
+
+  - name: "Creating Improved columnstoreAlias.sh"
+    copy:
+      src: ../scripts/columnstoreAlias.sh
+      dest: /etc/profile.d/columnstoreAlias.sh
+      force: yes
+      owner: root
+      group: root
+      mode: '0644'
+
+  - name: "Copying Extent Backup Utility"
+    copy:
+      src: ../scripts/extent_backup
+      dest: /usr/bin/extent_backup
+      owner: root
+      group: root
+      mode: '0755'
 
 - hosts: "mx"
   become: yes

@@ -8,14 +8,24 @@
 
   tasks:
 
-  - name: "Copying Sample Data To Server"
+  - name: "Copying Sample Data File To Server"
     copy:
-      src: ../templates/cs_validation.sql
+      src: ../scripts/cs_validation.sql
       dest: /tmp/cs_validation.sql
-      mode: 644
+      mode: '0644'
 
   - name: "Creating Sample Table"
-    shell: mariadb < /tmp/cs_validation.sql
+    mysql_db:
+      name: all
+      state: import
+      target: /tmp/cs_validation.sql
+      login_unix_socket: '{{ mariadb_socket }}'
+    no_log: true
+
+  - name: "Cleaning Up Sample Data File"
+    file:
+      path: /tmp/cs_validation.sql
+      state: absent
 
 - hosts: "mcs2,mcs3"
   become: yes

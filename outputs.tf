@@ -46,8 +46,7 @@ resource "local_file" "AnsibleVariables" {
       repli_pass               = var.repli_pass,
       repli_user               = var.repli_user,
       s3_bucket                = aws_s3_bucket.s3_bucket.id,
-      s3_domain                = var.s3_domain
-      use_s3                   = var.use_s3,
+      s3_domain                = var.s3_domain,
     }
   )
   filename = "inventory/group_vars/all.yml"

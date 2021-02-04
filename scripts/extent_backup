@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+
+MARIADB=$(which mariadb)
+SAVE=$(which save_brm)
+LOG=/var/log/mariadb/columnstore/extent_map_backup.log
+SOURCEPATH=/var/lib/columnstore/data1/systemFiles/dbrm/BRM_saves_em
+BACKUP_DIR=/backup
+SUFFIX=$(date +"%Y-%m-%d_%H_%M_%S")
+FILENAME=$(basename $SOURCEPATH)
+TARGETPATH="$BACKUP_DIR/$FILENAME.$SUFFIX"
+
+touch $LOG
+if [ $? -ne 0 ]; then
+    echo "Cannot write to $LOG"
+    exit 1
+fi
+
+echo "########## BEGIN $SUFFIX BACKUP ##########" >> $LOG
+
+$MARIADB --verbose -e "FLUSH TABLES WITH READ LOCK;" &>> $LOG
+if [ $? -ne 0 ]; then
+    echo "FLUSH TABLES WITH READ LOCK failed. Please check $LOG"
+    exit 1
+fi
+
+$SAVE &>> $LOG
+if [ $? -eq 0 ]; then
+    cp -f $SOURCEPATH $TARGETPATH &>> $LOG
+    if [ $? -ne 0 ]; then
+        echo "File copy failed. Please check $LOG"
+        exit 1
+    fi
+else
+    echo "BRM save failed. Please check $LOG"
+    exit 1
+fi
+
+$MARIADB --verbose -e "UNLOCK TABLES;" &>> $LOG
+if [ $? -ne 0 ]; then
+    echo "UNLOCK TABLES failed. Please check $LOG"
+    exit 1
+fi
+
+echo "Successfully Backed Up Extent Map to $TARGETPATH"

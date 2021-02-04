@@ -131,9 +131,9 @@ resource "aws_s3_bucket" "s3_bucket" {
 
 resource "aws_ebs_volume" "metadata" {
   availability_zone    = var.aws_zone
-  iops                 = 500
+  iops                 = 3000
   multi_attach_enabled = true
-  size                 = 10
+  size                 = 100
   type                 = "io1"
 }
 

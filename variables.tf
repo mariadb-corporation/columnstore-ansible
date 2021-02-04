@@ -103,7 +103,7 @@ variable "maxscale_version" {
 
 variable "reboot" {
   type    = bool
-  default = "1"
+  default = true
 }
 
 variable "aws_region" {
@@ -121,10 +121,11 @@ variable "aws_ami" {
   default = "ami-0a4497cbe959da512"
 }
 
-# "ami-0a4497cbe959da512" (centos7)
-# "ami-0c9ff37f7a65a36a2" (centos8)
-# "ami-0ac73f33a1888c64a" (ubuntu18)
-# "ami-07dd19a7900a1f049" (ubuntu20)
+# "ami-0a4497cbe959da512" (centos 7)
+# "ami-0c9ff37f7a65a36a2" (centos 8)
+# "ami-0ddc70e50205f89b6" (centos stream 8)
+# "ami-0ac73f33a1888c64a" (ubuntu 18)
+# "ami-07dd19a7900a1f049" (ubuntu 20)
 
 variable "aws_mariadb_instance_size" {
   type    = string
@@ -134,11 +135,6 @@ variable "aws_mariadb_instance_size" {
 variable "aws_maxscale_instance_size" {
   type    = string
   default = "t3.medium"
-}
-
-variable "use_s3" {
-  type    = bool
-  default = "1"
 }
 
 variable "s3_domain" {

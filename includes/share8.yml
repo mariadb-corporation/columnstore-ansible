@@ -1,0 +1,125 @@
+---
+
+- hosts: "mcs"
+  become: yes
+  become_user: root
+  vars_files:
+    - '../inventory/group_vars/distro/{{ ansible_distribution|lower }}{{ ansible_distribution_major_version }}.yml'
+
+  tasks:
+
+  - name: "Creating StorageManager Folder"
+    file:
+      path: /var/lib/columnstore/storagemanager
+      state: directory
+
+  - name: "Installing PCS Items"
+    dnf:
+      name: '{{ item }}'
+      state: present
+      disable_gpg_check: yes
+      update_cache: yes
+      enablerepo: ha
+    with_items:
+      - '{{ dlm }}'
+      - '{{ dlm_lib }}'
+      - '{{ fence_agent }}'
+      - '{{ gfs2 }}'
+      - '{{ lvm2 }}'
+      - '{{ pcp_zeroconf }}'
+      - '{{ pcs }}'
+
+  - name: "Pinning DLM Version"
+    shell: dnf -y install dnf-plugin-versionlock && dnf versionlock dlm*
+
+  - name: "Updating lvm.conf"
+    replace:
+      path: /etc/lvm/lvm.conf
+      regexp: '^.*use_lvmlockd = 0'
+      replace: '\tuse_lvmlockd = 1'
+
+  - name: "Setting PCS Password"
+    user:
+      name: hacluster
+      password: "{{ pcs_pass | password_hash('sha512') }}"
+
+  - name: "Enabling PCS Service"
+    systemd:
+      name: pcsd
+      state: restarted
+      enabled: yes
+
+- hosts: "mcs1"
+  become: yes
+  become_user: root
+  vars_files:
+    - '../inventory/group_vars/distro/{{ ansible_distribution|lower }}{{ ansible_distribution_major_version }}.yml'
+
+  tasks:
+
+  - name: "Authenticating PCS Cluster"
+    command: pcs host auth -u hacluster -p '{{ pcs_pass }}' {{ hostvars.mcs1_private.ansible_host }} {{ hostvars.mcs2_private.ansible_host }} {{ hostvars.mcs3_private.ansible_host }}
+
+  - name: "Setting Up PCS Cluster"
+    command: pcs cluster setup metacluster --start {{ hostvars.mcs1_private.ansible_host }} {{ hostvars.mcs2_private.ansible_host }} {{ hostvars.mcs3_private.ansible_host }} --force
+
+  - name: "Enabling PCS Cluster"
+    command: pcs cluster enable --all
+
+  - name: "Fencing PCS Cluster"
+    command: pcs stonith create clusterfence fence_aws access_key={{ aws_access_key_id}} secret_key={{ aws_secret_access_key }} region={{ aws_region }} pcmk_host_map="{{ hostvars.mcs1_private.ansible_host }}:Instance-ID-1;{{ hostvars.mcs2_private.ansible_host }}:Instance-ID-2;{{ hostvars.mcs3_private.ansible_host }}:Instance-ID-3" power_timeout=240 pcmk_reboot_timeout=480 pcmk_reboot_retries=4
+
+  - name: "Setting Policy For PCS Cluster"
+    command: pcs property set no-quorum-policy=freeze
+
+  - name: "Creating DLM Resource"
+    command: pcs resource create dlm --group locking ocf:pacemaker:controld op monitor interval=30s on-fail=fence
+
+  - name: "Cloning Resource Group"
+    command: pcs resource clone locking interleave=true
+
+  - name: "Creating LVMLOCKD Resource"
+    command: pcs resource create lvmlockd --group locking ocf:heartbeat:lvmlockd op monitor interval=30s on-fail=fence
+
+  - name: "Creating Logical Volume Group"
+    command: vgcreate --shared sharedvg1 /dev/nvme1n1
+
+- hosts: "mcs"
+  become: yes
+  become_user: root
+  vars_files:
+    - '../inventory/group_vars/distro/{{ ansible_distribution|lower }}{{ ansible_distribution_major_version }}.yml'
+
+  tasks:
+
+  - name: "Starting Locking"
+    command: vgchange --lock-start sharedvg1
+
+- hosts: "mcs1"
+  become: yes
+  become_user: root
+  vars_files:
+    - '../inventory/group_vars/distro/{{ ansible_distribution|lower }}{{ ansible_distribution_major_version }}.yml'
+
+  tasks:
+
+  - name: "Creating Logical Volume"
+    command: lvcreate --activate sy -L8G -n sharedlv1 sharedvg1
+
+  - name: "Creating GFS2 Filesystem On Logical Volume"
+    command: mkfs.gfs2 -O -j3 -p lock_dlm -t metacluster:metadata /dev/sharedvg1/sharedlv1
+
+  - name: "Creating Logical Volume"
+    command: pcs resource create sharedlv1 --group sharedvg1 ocf:heartbeat:LVM-activate lvname=sharedlv1 vgname=sharedvg1 activation_mode=shared vg_access_mode=lvmlockd
+
+  - name: "Cloning Shared Folder Resource"
+    command: pcs resource clone sharedvg1 interleave=true
+
+  - name: "Adding Contraint Order"
+    command: pcs constraint order start locking-clone then sharedvg1-clone
+
+  - name: "Adding Contraint Colocation"
+    command: pcs constraint colocation add sharedvg1-clone with locking-clone
+
+  - name: "Creating Shared Folder Resource"
+    command: pcs resource create sharedfs1 --group sharedvg1 ocf:heartbeat:Filesystem device="/dev/sharedvg1/sharedlv1" directory="/var/lib/columnstore/storagemanager" fstype="gfs2" options=noatime op monitor interval=10s on-fail=fence

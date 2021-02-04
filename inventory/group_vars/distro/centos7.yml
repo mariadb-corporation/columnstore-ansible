@@ -2,12 +2,13 @@
 
 boto: python-boto3
 columnstore_cnf: /etc/my.cnf.d/columnstore.cnf
+dlm: dlm
+dlm_lib: dlm_lib
+version: 7
 fence_agent: fence-agents-aws
 gcc: gcc
 gfs2: gfs2-utils
 git: git
-gluster_repo: centos-release-gluster7
-gluster_server: glusterfs-server
 htop: htop
 jemalloc: jemalloc
 jq: jq
@@ -26,6 +27,7 @@ maxscale: maxscale
 mlocate: mlocate
 nano: nano
 pcs: pcs
+pcp_zeroconf: pcp-zeroconf
 pre_task: yum -y install epel-release && yum -y install python3
 python_dev: python-devel
 python_mysql: python2-PyMySQL,python3-PyMySQL
