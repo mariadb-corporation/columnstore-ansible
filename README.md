@@ -90,6 +90,7 @@ curl -s -X PUT https://127.0.0.1:8640/cmapi/0.4.0/cluster/remove-node --header '
 ###### Mode Set:
 ```
 curl -s -X PUT https://127.0.0.1:8640/cmapi/0.4.0/cluster/mode-set --header 'Content-Type:application/json' --header 'x-api-key:somekey123' --data '{"timeout":20, "mode": "readwrite"}' -k | jq .
+```
 
 #### MaxScale GUI Info
 
