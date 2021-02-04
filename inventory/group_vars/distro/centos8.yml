@@ -34,4 +34,5 @@ python_requests: python3-requests
 server_cnf: /etc/my.cnf.d/server.cnf
 tar: tar
 unzip: unzip
+version: 8
 wget: wget

@@ -2,9 +2,8 @@
 
 boto: python-boto3
 columnstore_cnf: /etc/my.cnf.d/columnstore.cnf
-dlm: dlm
 dlm_lib: dlm_lib
-version: 7
+dlm: dlm
 fence_agent: fence-agents-aws
 gcc: gcc
 gfs2: gfs2-utils
@@ -26,8 +25,8 @@ mariadb_socket: /var/lib/mysql/mysql.sock
 maxscale: maxscale
 mlocate: mlocate
 nano: nano
-pcs: pcs
 pcp_zeroconf: pcp-zeroconf
+pcs: pcs
 pre_task: yum -y install epel-release && yum -y install python3
 python_dev: python-devel
 python_mysql: python2-PyMySQL,python3-PyMySQL
@@ -35,4 +34,5 @@ python_requests: python3-requests
 server_cnf: /etc/my.cnf.d/server.cnf
 tar: tar
 unzip: unzip
+version: 7
 wget: wget
