@@ -1,7 +1,7 @@
 ![logo](https://raw.githubusercontent.com/mariadb-corporation/mariadb-community-columnstore-docker/master/MDB-HLogo_RGB.jpg)
 
 ### MariaDB Enterprise 10.5.8 / ColumnStore 5.5.x Cluster / CMAPI 1.2
-
+![diagram](images/architecture.png)
 #### About:
 
 This is a [Terraform](https://www.terraform.io/) and [Ansible](https://www.ansible.com/) project to provision a **high availability** [MariaDB ColumnStore](https://mariadb.com/docs/features/mariadb-enterprise-columnstore/#mariadb-enterprise-columnstore) deployment on [Amazon Web Services](https://aws.amazon.com/). This automation project will create the following system:
@@ -86,6 +86,10 @@ curl -s -X PUT https://127.0.0.1:8640/cmapi/0.4.0/cluster/add-node --header 'Con
 ```
 curl -s -X PUT https://127.0.0.1:8640/cmapi/0.4.0/cluster/remove-node --header 'Content-Type:application/json' --header 'x-api-key:somekey123' --data '{"timeout":20, "node": "<replace_with_desired_hostname>"}' -k | jq .
 ```
+
+###### Mode Set:
+```
+curl -s -X PUT https://127.0.0.1:8640/cmapi/0.4.0/cluster/mode-set --header 'Content-Type:application/json' --header 'x-api-key:somekey123' --data '{"timeout":20, "mode": "readwrite"}' -k | jq .
 
 #### MaxScale GUI Info
 
