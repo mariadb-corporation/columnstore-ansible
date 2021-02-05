@@ -41,6 +41,21 @@ AMI OS|AMI ID|Region|Zone|
 ---|---|---|---|
 centos7|ami-0a4497cbe959da512|us-west-2|us-west-2a|
 
+#### Cluster Manipulation Tools
+
+*   `core`  Change directory to /var/log/mariadb/columnstore/corefiles
+*   `dbrm` Change directory to /var/lib/columnstore/data1/systemFiles/dbrm
+*   `extentSave` Backup extent map
+*   `mcsModule` View current module name
+*   `mcsStart` Start cluster via CMAPI
+*   `mcsStatus` Get cluster status via CMAPI
+*   `mcsShutdown` Shutdown cluster via CMAPI
+*   `tcrit` Tail crit.log
+*   `tdebug` Tail debug.log
+*   `terror` Tail error.log
+*   `tinfo` Tail info.log
+*   `twarning` Tail warning.log
+
 #### REST-API Instructions
 
 ##### Format of url endpoints for REST API:

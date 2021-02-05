@@ -129,8 +129,8 @@
 
   - name: "Copying Extent Backup Utility"
     copy:
-      src: ../scripts/extent_backup
-      dest: /usr/bin/extent_backup
+      src: ../scripts/extentSave
+      dest: /usr/bin/extentSave
       owner: root
       group: root
       mode: '0755'
