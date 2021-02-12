@@ -16,7 +16,6 @@ mariadb_backup: MariaDB-backup
 mariadb_client: MariaDB-client
 mariadb_columnstore_cmapi: mariadb-columnstore-cmapi
 mariadb_columnstore: MariaDB-columnstore-engine
-mariadb_cs_engine: MariaDB-columnstore-engine
 mariadb_libs: mariadb-libs
 mariadb_repo: /etc/yum.repos.d/mariadb.repo
 mariadb_server: MariaDB-server
