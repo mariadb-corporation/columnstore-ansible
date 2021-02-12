@@ -1,7 +1,5 @@
 ---
 
-## https://aws.amazon.com/blogs/storage/clustered-storage-simplified-gfs2-on-amazon-ebs-multi-attach-enabled-volumes/
-
 - hosts: "mcs"
   become: yes
   become_user: root
@@ -10,7 +8,12 @@
 
   tasks:
 
-  - name: "Installing PCS Items"
+  - name: "Creating StorageManager Folder"
+    file:
+      path: /var/lib/columnstore/storagemanager
+      state: directory
+
+  - name: "Installing Cluster Items"
     package:
       name: '{{ item }}'
       state: present
@@ -18,11 +21,13 @@
     with_items:
       - '{{ pcs }}'
       - '{{ fence_agent }}'
+      - '{{ lvm2 }}'
+      - '{{ gfs2 }}'
 
   - name: "Enabling PCS Service"
     systemd:
       name: pcsd
-      state: started
+      state: restarted
       enabled: yes
 
   - name: "Setting PCS Password"
@@ -41,8 +46,8 @@
   - name: "Authenticating PCS Cluster"
     shell: pcs cluster auth -u hacluster -p '{{ pcs_pass }}' {{ hostvars.mcs1_private.ansible_host }} {{ hostvars.mcs2_private.ansible_host }} {{ hostvars.mcs3_private.ansible_host }}
 
-  - name: "Setting Up PCS Cluster"
-    shell: pcs cluster setup --name metacluster {{ hostvars.mcs1_private.ansible_host }} {{ hostvars.mcs2_private.ansible_host }} {{ hostvars.mcs3_private.ansible_host }}
+  - name: "Creating PCS Cluster"
+    shell: pcs cluster setup --name metacluster {{ hostvars.mcs1_private.ansible_host }} {{ hostvars.mcs2_private.ansible_host }} {{ hostvars.mcs3_private.ansible_host }} --force
 
   - name: "Starting PCS Cluster"
     shell: pcs cluster start --all
@@ -56,41 +61,8 @@
   - name: "Creating Lock Manager For PCS Cluster"
     shell: pcs resource create dlm ocf:pacemaker:controld op monitor interval=30s on-fail=fence clone interleave=true ordered=true
 
-- hosts: "mcs"
-  become: yes
-  become_user: root
-  vars_files:
-    - '../inventory/group_vars/distro/{{ ansible_distribution|lower }}{{ ansible_distribution_major_version }}.yml'
-
-  tasks:
-
-  - name: "Enabling PCS Startup"
-    shell: pcs cluster enable
-
-  - name: "Creating StorageManager Folder"
-    file:
-      path: /var/lib/columnstore/storagemanager
-      state: directory
-
-  - name: "Installing GFS2 Items"
-    package:
-      name: '{{ item }}'
-      state: present
-      update_cache: yes
-    with_items:
-      - '{{ lvm2 }}'
-      - '{{ gfs2 }}'
-
   - name: "Enabling PCS Cluster Locking"
     shell: /sbin/lvmconf --enable-cluster
-
-- hosts: "mcs1"
-  become: yes
-  become_user: root
-  vars_files:
-    - '../inventory/group_vars/distro/{{ ansible_distribution|lower }}{{ ansible_distribution_major_version }}.yml'
-
-  tasks:
 
   - name: "Creating CLVM Resource"
     shell: pcs resource create clvmd ocf:heartbeat:clvm op monitor interval=30s on-fail=fence clone interleave=true ordered=true
@@ -101,14 +73,28 @@
   - name: "Setting CLVM Constraint"
     shell: pcs constraint colocation add clvmd-clone with dlm-clone
 
-  - name: "Initializing Physical Volume"
-    shell: pvcreate /dev/nvme1n1
+#  - name: "Initializing Physical Volume"
+#    shell: pvcreate /dev/nvme1n1
+
+#  - name: "Creating Logical Volume Group"
+#    shell: vgcreate -Ay -cy clustervg /dev/nvme1n1
+#
+#  - name: "Creating Logical Volume"
+#    shell: lvcreate -L9G -n clusterlv clustervg
 
   - name: "Creating Logical Volume Group"
-    shell: vgcreate -Ay -cy clustervg /dev/nvme1n1
+    lvg:
+      vg: clustervg
+      pvs: /dev/nvme1n1
+      pvresize: yes
+      force: yes
 
   - name: "Creating Logical Volume"
-    shell: lvcreate -L3G -n clusterlv clustervg
+    lvol:
+      vg: clustervg
+      lv: clusterlv
+      size: 100%FREE
+      force: yes
 
   - name: "Creating GFS2 Filesystem On Logical Volume"
     shell: mkfs.gfs2 -O -j3 -p lock_dlm -t metacluster:metadata /dev/clustervg/clusterlv
