@@ -89,6 +89,11 @@ variable "pcs_pass" {
   default = "SET YOUR METADATA PCS CLUSTER PASSWORD HERE"
 }
 
+variable "prometheus_exporter" {
+  type    = string
+  default = false
+}
+
 #### DO NOT EDIT BELOW THIS POINT UNLESS YOU ARE FAMILIAR WITH THESE PARAMETERS
 
 variable "mariadb_version" {

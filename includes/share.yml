@@ -93,7 +93,7 @@
     lvol:
       vg: clustervg
       lv: clusterlv
-      size: 100%FREE
+      size: 100%VG
       force: yes
 
   - name: "Creating GFS2 Filesystem On Logical Volume"

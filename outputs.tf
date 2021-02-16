@@ -42,6 +42,7 @@ resource "local_file" "AnsibleVariables" {
       privateip3               = aws_instance.mcs3.private_ip,
       privateip4               = aws_instance.mx1.private_ip,
       privateip5               = aws_instance.mx2.private_ip,
+      prometheus_exporter      = var.prometheus_exporter,
       reboot                   = var.reboot,
       repli_pass               = var.repli_pass,
       repli_user               = var.repli_user,
