@@ -8,6 +8,8 @@ fence_agent: fence-agents-aws
 gcc: gcc
 gfs2: gfs2-utils
 git: git
+gluster_repo: centos-release-gluster7
+gluster_server: glusterfs-server
 htop: htop
 jemalloc: jemalloc
 jq: jq
