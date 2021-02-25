@@ -42,6 +42,21 @@ variable "cmapi_key" {
   default = "CREATE A COLUMNSTORE API KEY HERE"
 }
 
+variable "pcs_pass" {
+  type    = string
+  default = "SET YOUR METADATA PCS CLUSTER PASSWORD HERE"
+}
+
+variable "prometheus_exporter" {
+  type    = bool
+  default = false
+}
+
+variable "s3_active" {
+  type    = bool
+  default = true
+}
+
 #### DATABASE CREDENTIALS
 
 variable "admin_user" {
@@ -82,16 +97,6 @@ variable "cej_user" {
 variable "cej_pass" {
   type    = string
   default = "SET YOUR COLUMNSTORE UTILITY USER PASSWORD HERE"
-}
-
-variable "pcs_pass" {
-  type    = string
-  default = "SET YOUR METADATA PCS CLUSTER PASSWORD HERE"
-}
-
-variable "prometheus_exporter" {
-  type    = string
-  default = false
 }
 
 #### DO NOT EDIT BELOW THIS POINT UNLESS YOU ARE FAMILIAR WITH THESE PARAMETERS
