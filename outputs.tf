@@ -46,7 +46,8 @@ resource "local_file" "AnsibleVariables" {
       reboot                   = var.reboot,
       repli_pass               = var.repli_pass,
       repli_user               = var.repli_user,
-      s3_bucket                = aws_s3_bucket.s3_bucket.id,
+      s3_active                = var.s3_active,
+      s3_bucket                = aws_s3_bucket.s3_bucket[0].id,
       s3_domain                = var.s3_domain,
     }
   )

@@ -48,6 +48,7 @@
       dest: /etc/columnstore/storagemanager.cnf
       owner: mysql
       group: mysql
+    when: s3_active == true
 
   - name: "Adjusting Bind Address"
     replace:

@@ -130,6 +130,7 @@ resource "aws_instance" "mx2" {
 }
 
 resource "aws_s3_bucket" "s3_bucket" {
+  count         = var.s3_active ? 1 : 0
   bucket_prefix = "mcs-"
   force_destroy = true
   tags = {

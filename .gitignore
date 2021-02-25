@@ -5,10 +5,9 @@ ansible.cfg
 crash.log
 create.sh
 destroy.sh
-ebs_centos8.yml
-includes/nfs.yml
-inventory/group_vars/all.yml
-inventory/hosts
+all.yml
+hosts
 restart-git.sh
 terraform.tfstate*
 variables.bak
+adduser.yml
