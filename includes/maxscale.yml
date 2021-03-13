@@ -1,6 +1,6 @@
 ---
 
-- hosts: "mx"
+- hosts: "maxscale"
   become: yes
   become_user: root
   vars_files:

@@ -1,6 +1,6 @@
 ---
 
-- hosts: "mcs"
+- hosts: "primary,replicas"
   become: yes
   become_user: root
   vars_files:
@@ -35,7 +35,7 @@
       name: hacluster
       password: "{{ pcs_pass | password_hash('sha512') }}"
 
-- hosts: "mcs1"
+- hosts: "primary"
   become: yes
   become_user: root
   vars_files:

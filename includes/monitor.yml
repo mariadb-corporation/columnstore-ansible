@@ -1,6 +1,6 @@
 ---
 
-- hosts: "mcs"
+- hosts: "primary,replicas"
   become: yes
   become_user: root
   vars_files:

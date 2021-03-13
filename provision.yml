@@ -2,7 +2,7 @@
 
 ## Wait For Servers To Boot
 
-- hosts: "mcs,mx"
+- hosts: "primary,replicas,maxscale"
   become: yes
   become_user: root
   gather_facts: no
@@ -13,7 +13,7 @@
 
 ## Bootstrap For Ansible
 
-- hosts: "mcs,mx"
+- hosts: "primary,replicas,maxscale"
   become: yes
   become_user: root
   gather_facts: yes

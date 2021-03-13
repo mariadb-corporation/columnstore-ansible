@@ -1,6 +1,6 @@
 ---
 
-- hosts: "mcs1"
+- hosts: "primary"
   become: yes
   become_user: root
   vars_files:
@@ -27,7 +27,7 @@
       path: /tmp/cs_validation.sql
       state: absent
 
-- hosts: "mcs2,mcs3"
+- hosts: "replicas"
   become: yes
   become_user: root
   vars_files:
@@ -43,7 +43,7 @@
     command: /bin/false
     when: mariadb_result.stdout != '10'
 
-- hosts: "mcs1"
+- hosts: "primary"
   become: yes
   become_user: root
   vars_files:

@@ -10,11 +10,13 @@ mcs3_private ansible_host=${privatedns3}
 mx1_private ansible_host=${privatedns4}
 mx2_private ansible_host=${privatedns5}
 
-[mcs]
+[primary]
 mcs1
+
+[replicas]
 mcs2
 mcs3
 
-[mx]
+[maxscale]
 mx1
 mx2

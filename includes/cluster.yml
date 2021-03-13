@@ -1,6 +1,6 @@
 ---
 
-- hosts: "mcs1"
+- hosts: "primary"
   become: yes
   become_user: root
   vars_files:
@@ -88,7 +88,7 @@
   - name: "Updating Columnstore.xml With Cross Engine Support Password"
     command: mcsSetConfig CrossEngineSupport Password '{{ cej_pass }}'
 
-- hosts: "mcs2,mcs3"
+- hosts: "replicas"
   become: yes
   become_user: root
   vars_files:
@@ -128,7 +128,7 @@
       mode: startslave
       login_unix_socket: '{{ mariadb_socket }}'
 
-- hosts: "mcs1"
+- hosts: "primary"
   become: yes
   become_user: root
   vars_files:
@@ -136,7 +136,7 @@
 
   tasks:
 
-  - name: "Adding First Node To ColumnStore Cluster"
+  - name: "Adding Nodes To ColumnStore Cluster"
     uri:
       url: https://{{ hostvars.mcs1_private.ansible_host }}:8640/cmapi/0.4.0/cluster/add-node
       method: PUT
@@ -147,33 +147,9 @@
       return_content: yes
       status_code: 200
       body_format: json
-      body: {"timeout":180, "node":"{{ hostvars.mcs1_private.ansible_host }}"}
+      body: "{{ item }}"
       timeout: 180
-
-  - name: "Adding Second Node To ColumnStore Cluster"
-    uri:
-      url: https://{{ hostvars.mcs1_private.ansible_host }}:8640/cmapi/0.4.0/cluster/add-node
-      method: PUT
-      headers:
-        Content-Type: application/json
-        x-api-key: "{{ api_key }}"
-      validate_certs: no
-      return_content: yes
-      status_code: 200
-      body_format: json
-      body: {"timeout":180, "node":"{{ hostvars.mcs2_private.ansible_host }}"}
-      timeout: 180
-
-  - name: "Adding Third Node To ColumnStore Cluster"
-    uri:
-      url: https://{{ hostvars.mcs1_private.ansible_host }}:8640/cmapi/0.4.0/cluster/add-node
-      method: PUT
-      headers:
-        Content-Type: application/json
-        x-api-key: "{{ api_key }}"
-      validate_certs: no
-      return_content: yes
-      status_code: 200
-      body_format: json
-      body: {"timeout":180, "node":"{{ hostvars.mcs3_private.ansible_host }}"}
-      timeout: 180
+    loop:
+        - {"timeout":180, "node":"{{ hostvars.mcs1_private.ansible_host }}"}
+        - {"timeout":180, "node":"{{ hostvars.mcs2_private.ansible_host }}"}
+        - {"timeout":180, "node":"{{ hostvars.mcs3_private.ansible_host }}"}
