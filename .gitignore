@@ -1,13 +1,13 @@
 .DS_Store
 .terraform*
 .variables.tf
+adduser.yml
+all.yml
 ansible.cfg
 crash.log
 create.sh
 destroy.sh
-all.yml
+dwhs.sql
 hosts
-restart-git.sh
 terraform.tfstate*
 variables.bak
-adduser.yml
